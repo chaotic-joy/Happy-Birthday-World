@@ -42,18 +42,18 @@ export class Placeholders {
   _makePanel(number, loader) {
     const panel = new THREE.Group();
 
-    // Frame (slightly larger, pastel border).
+    // Frame (slightly larger, pastel border). Photos are 16:9.
     const frameW = 6.4;
-    const frameH = 4.6;
+    const frameH = 4.0;
     const frame = new THREE.Mesh(
       new THREE.PlaneGeometry(frameW, frameH),
       new THREE.MeshBasicMaterial({ color: 0xfff6e9, side: THREE.DoubleSide })
     );
     panel.add(frame);
 
-    // Picture surface.
+    // Picture surface (16:9).
     const picW = 6;
-    const picH = 4.2;
+    const picH = 6 * (9 / 16);
     const tex = makePlaceholderTexture(number);
     const picMat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
     const pic = new THREE.Mesh(new THREE.PlaneGeometry(picW, picH), picMat);
@@ -62,7 +62,7 @@ export class Placeholders {
 
     // Try to upgrade to a real image; keep placeholder if missing.
     loader.load(
-      `./images/${number}.jpg`,
+      `./images/${number}.png`,
       (loaded) => {
         loaded.colorSpace = THREE.SRGBColorSpace;
         picMat.map = loaded;
@@ -121,7 +121,7 @@ const placeholderColors = [
 function makePlaceholderTexture(number) {
   const c = document.createElement('canvas');
   c.width = 512;
-  c.height = 358;
+  c.height = 288;
   const ctx = c.getContext('2d');
   const bg = placeholderColors[(number - 1) % placeholderColors.length];
 

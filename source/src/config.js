@@ -75,7 +75,7 @@ export const BOOST = {
   fov: { normal: 60, boost: 78 }, // camera FOV ease
 };
 
-export const PLACEHOLDER_COUNT = 13;
+export const PLACEHOLDER_COUNT = 12;
 
 // Path to the celebration sound that plays when the lights go out.
 // Drop your file at: public/sounds/start.mp3

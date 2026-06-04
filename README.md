@@ -3,7 +3,7 @@
 A cute, lofi **night-time** WebGL racing game built as a birthday surprise for
 Clark. Drive a low-poly F1 car around a winding pastel circuit under a starry
 sky. A real F1-style five-light countdown leads into a full celebration:
-fireworks, a giant three-tier birthday cake, balloons, animated signs, 13 floating
+fireworks, a giant three-tier birthday cake, balloons, animated signs, 12 floating
 photos, and big 3D **"Happy Birthday Clark!"** banners.
 
 Built with **[Three.js](https://threejs.org/) + [Vite](https://vitejs.dev/)**.
@@ -84,7 +84,8 @@ Input stays locked until the countdown ends — you can't jump the start. 🚦
   on lights-out, plus a synthesized engine that pulses and revs with speed.
 - **🎉 3D birthday banners** — three "Happy Birthday Clark!" banners built with
   `TextGeometry`, placed around the track to face oncoming cars, popped in at the start.
-- **🖼️ 13 photo billboards** — float along the track, hidden until GO, then pop in.
+- **🖼️ 12 photo billboards** — float along the track, hidden until GO, then pop in
+  (photos `1.png`..`12.png` are **included**).
 - **🎆 GPU fireworks** — shader-based particle bursts with UnrealBloom; explosions
   cast colored light onto the track.
 - **🎂 Giant cake** — a 3-tier infield cake with candles on every tier, wrap-around
@@ -108,7 +109,7 @@ bundling. No backend — it's a static site.
 - Clicking **"Start Race"** (the browser gesture required to enable audio) creates
   the `AudioContext` and engine sound, then runs the countdown.
 - **On lights-out (GO):** input unlocks, the celebration track plays, the three
-  birthday banners appear, the 13 photos / gif signs / balloons (all hidden until
+  birthday banners appear, the 12 photos / gif signs / balloons (all hidden until
   now) pop in, continuous fireworks start, and the engine sound kicks in.
 
 ### Project structure (`source/`)
@@ -130,7 +131,7 @@ src/
   audio.js              celebration track (public/sounds/start.mp3) on lights-out
   engine.js             synthesized engine sound (amplitude-modulated; revs with speed)
   birthday.js           generic FloatingText; main.js builds 3 banners + pop-in
-  placeholders.js       13 photo billboards along the track; hidden until GO
+  placeholders.js       12 photo billboards along the track; hidden until GO
   gifs.js               animated signs: local WebP/GIF (decoded) > Giphy > built-in
   fireworks.js          GPU shader fireworks (per-burst Points) + bloom + explosion lights
   cake.js               3-tier infield cake: candles on all tiers + wrap text + photo topper
@@ -138,22 +139,23 @@ src/
   photoTopper.js        helper: makeCircularPhoto(url, radius) — circular framed photo
 public/
   sounds/start.mp3      celebration track (included)
-  images/               clark_topper.png (cake topper); add 1.jpg..13.jpg for billboards
+  images/               1.png..12.png (billboard photos) + clark_topper.png (cake topper)
   gifs/                 ~24 animated webp signs + manifest.json + README.txt
   models/               LowpolyF1.obj + Colores03.png (car model + texture)
 ```
 
 ---
 
-## 🖼️ Adding your own photos
+## 🖼️ Swapping in your own photos
 
-The celebration sound (`start.mp3`) and cake topper are already in place. The one
-thing still to add is the **13 billboard photos**:
+Everything is already in place — the celebration sound (`start.mp3`), the cake
+topper, and all **12 billboard photos** (`1.png`..`12.png`). To customize:
 
-- Drop `1.jpg`..`13.jpg` into `source/public/images/` (square-ish images look best).
-- To add more animated signs, put WebP/GIF files in `source/public/gifs/` and list
-  them in `manifest.json` (see `public/gifs/README.txt`). Optional Giphy support
-  exists via an API key.
+- Replace `1.png`..`12.png` in `source/public/images/` with your own (16:9 images
+  look best; missing files just fall back to a numbered "Photo N" placeholder).
+- To add/change animated signs, put WebP/GIF files in `source/public/gifs/` and
+  list them in `manifest.json` (see `public/gifs/README.txt`). Optional Giphy
+  support exists via an API key.
 
 > Browser note: animated **WebP** needs `ImageDecoder` (Chrome/Edge). Safari/Firefox
 > show the first frame as a static image (still the right picture); `.gif` animates

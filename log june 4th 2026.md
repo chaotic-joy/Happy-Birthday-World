@@ -48,7 +48,7 @@ src/
   audio.js              celebration music (public/sounds/start.mp3); starts on "Start Race" click
   engine.js             synthesized engine sound (pulsing, revs with speed — not a drone)
   birthday.js           exports FloatingText: generic 3D banner (FontLoader/TextGeometry) + pop-in
-  placeholders.js       13 photo billboards along the track; hidden until GO; pop-in
+  placeholders.js       12 photo billboards (16:9) along the track; hidden until GO; pop-in
   gifs.js               animated signs (24): local WebP/GIF (decoded) > Giphy > built-in; hidden until GO
   fireworks.js          GPU shader fireworks + bloom + colored explosion lights on the track
   cake.js               3-tier cake: candles on ALL tiers + wrap-around bottom text + circular photo topper
@@ -57,7 +57,7 @@ src/
   (3 FloatingText banners are created in main.js: start, 1/3, 2/3 around the loop)
 public/
   sounds/               drop start.mp3 (celebration sound) here
-  images/               numbered 1.jpg..13.jpg for the photo billboards; clark_topper.png (topper)
+  images/               1.png..12.png (16:9) for the photo billboards; clark_topper.png (topper)
   gifs/                 animated webp/gif signs + manifest.json + README.txt
   models/               LowpolyF1.obj + Colores03.png (car model + texture)
 ```
@@ -69,7 +69,7 @@ public/
 - Boot waits for the 3D font (all 3 banners), the **car model**, before READY (splash hides).
 - Click "Start Race" (required browser gesture for audio) -> creates `AudioContext`,
   `EngineSound`, **starts the music** (`celebration.play()`), runs the countdown.
-- **On lights-out (GO):** unlock input, reveal all 3 floating banners, reveal the 13 photo
+- **On lights-out (GO):** unlock input, reveal all 3 floating banners, reveal the 12 photo
   billboards, **reveal the gif signs + balloons**, start continuous fireworks, start engine.
 
 ---
@@ -128,6 +128,9 @@ public/
 22. **"HAPPY BIRTHDAY CLARK!" wrapped around the cake's bottom tier** — `_buildBottomText()`
     in `cake.js` draws a canvas text band (cream fill + dark-plum outline) on a thin
     open-ended cylinder just outside the tier; `texture.repeat.x = 3` so it reads from any angle.
+23. **Replaced the photo billboards with 12 real images** (`public/images/1.png … 12.png`,
+    16:9 / 320×180) and **removed the 13th placeholder**: loader switched `.jpg` → `.png`,
+    panel set to 16:9 (no stretch), `PLACEHOLDER_COUNT` 13 → **12** (panels redistribute evenly).
 
 ---
 
@@ -157,7 +160,7 @@ Other notable in-file constants:
 ## Personalize (drop-in assets)
 - **Celebration music:** `public/sounds/start.mp3` (currently the user's track; starts on
   the "Start Race" click). It was re-encoded to 128 kbps to keep the bundle downloadable.
-- **13 photos:** `public/images/1.jpg … 13.jpg` (replace numbered placeholders).
+- **12 photos:** `public/images/1.png … 12.png` (16:9). Count is `PLACEHOLDER_COUNT` in config.
 - **Topper photo:** `public/images/clark_topper.png` (used on car + cake, shown circular).
 - **Animated signs:** `public/gifs/` — animated `.webp` or `.gif`. Choose via
   `manifest.json` (array of filenames) **or** number them `1.gif/1.webp`, `2…`. Empty
