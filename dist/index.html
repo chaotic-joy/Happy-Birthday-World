@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday Clark! 🏎️</title>
+    <style>
+      :root {
+        --pink: #ff8fb1;
+        --purple: #b58cff;
+        --teal: #7fdfd4;
+        --cream: #fff6e9;
+        --ink: #3a3550;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #cdeafe;
+        font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+        color: var(--ink);
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      /* ---------- HUD ---------- */
+      .hud {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      /* F1 start-light gantry */
+      #gantry {
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%) scale(1);
+        display: flex;
+        gap: 18px;
+        padding: 18px 22px;
+        background: rgba(28, 24, 40, 0.82);
+        border-radius: 18px;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+
+      #gantry.hidden {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px) scale(0.9);
+      }
+
+      .light-col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .lamp {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #2a0d12;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
+        transition: background 0.12s ease, box-shadow 0.12s ease;
+      }
+
+      .lamp.on {
+        background: #ff2a2a;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4),
+          0 0 18px 4px rgba(255, 60, 60, 0.85);
+      }
+
+      .lamp.go {
+        background: #2fd56a;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.35),
+          0 0 22px 6px rgba(60, 230, 120, 0.9);
+      }
+
+      /* Boost meter */
+      #boost-wrap {
+        position: absolute;
+        left: 50%;
+        bottom: 26px;
+        transform: translateX(-50%);
+        width: 280px;
+        max-width: 70vw;
+        text-align: center;
+        transition: opacity 0.4s ease;
+      }
+
+      #boost-wrap.hidden {
+        opacity: 0;
+      }
+
+      #boost-label {
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--cream);
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+        margin-bottom: 6px;
+      }
+
+      #boost-bar {
+        height: 14px;
+        border-radius: 10px;
+        background: rgba(28, 24, 40, 0.55);
+        overflow: hidden;
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+      }
+
+      #boost-fill {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        background: linear-gradient(90deg, var(--teal), var(--purple), var(--pink));
+        transition: width 0.08s linear;
+      }
+
+      #boost-fill.cooldown {
+        background: #8a8597;
+      }
+
+      /* Hint / controls */
+      #hint {
+        position: absolute;
+        left: 50%;
+        bottom: 64px;
+        transform: translateX(-50%);
+        font-size: 13px;
+        color: var(--cream);
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+        background: rgba(28, 24, 40, 0.4);
+        padding: 6px 14px;
+        border-radius: 20px;
+        white-space: nowrap;
+        transition: opacity 0.6s ease;
+      }
+
+      #hint.hidden {
+        opacity: 0;
+      }
+
+      /* Loading splash */
+      #loading {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 14px;
+        background: linear-gradient(160deg, #cdeafe, #e8d8ff);
+        color: var(--ink);
+        transition: opacity 0.8s ease;
+      }
+
+      #loading.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #loading h1 {
+        font-size: 26px;
+        letter-spacing: 1px;
+      }
+
+      .spinner {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 5px solid rgba(58, 53, 80, 0.2);
+        border-top-color: var(--pink);
+        animation: spin 0.9s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Tap-to-start (needed so audio can play after a user gesture) */
+      #start-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 18px;
+        background: rgba(20, 16, 34, 0.55);
+        backdrop-filter: blur(3px);
+        color: var(--cream);
+        cursor: pointer;
+        transition: opacity 0.5s ease;
+      }
+
+      #start-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #start-overlay .btn {
+        font-size: 22px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        padding: 16px 34px;
+        border-radius: 40px;
+        background: linear-gradient(120deg, var(--pink), var(--purple));
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      }
+
+      #start-overlay .sub {
+        font-size: 14px;
+        opacity: 0.85;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-C0fNej8z.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div class="hud">
+      <div id="gantry" class="hidden">
+        <div class="light-col"><span class="lamp"></span><span class="lamp"></span></div>
+        <div class="light-col"><span class="lamp"></span><span class="lamp"></span></div>
+        <div class="light-col"><span class="lamp"></span><span class="lamp"></span></div>
+        <div class="light-col"><span class="lamp"></span><span class="lamp"></span></div>
+        <div class="light-col"><span class="lamp"></span><span class="lamp"></span></div>
+      </div>
+
+      <div id="boost-wrap" class="hidden">
+        <div id="boost-label">Boost — press Space</div>
+        <div id="boost-bar"><div id="boost-fill"></div></div>
+      </div>
+
+      <div id="hint" class="hidden">↑ accelerate · ↓ brake · ←/→ steer · Space boost</div>
+    </div>
+
+    <div id="start-overlay">
+      <div class="btn">🏎️  Start Race</div>
+      <div class="sub">Tap / click to begin · sound on</div>
+    </div>
+
+    <div id="loading">
+      <div class="spinner"></div>
+      <h1>Warming up the grid…</h1>
+    </div>
+
+  </body>
+</html>
