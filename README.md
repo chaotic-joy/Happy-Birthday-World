@@ -1,10 +1,10 @@
 # 🏎️ Happy Birthday Clark! — Lofi WebGL F1 Birthday Game
 
 A cute, lofi **night-time** WebGL racing game built as a birthday surprise for
-Clark. Drive a low-poly F1 car around a winding pastel circuit under a starry
+your friend! Drive a low-poly F1 car around a winding pastel circuit under a starry
 sky. A real F1-style five-light countdown leads into a full celebration:
 fireworks, a giant three-tier birthday cake, balloons, animated signs, 12 floating
-photos, and big 3D **"Happy Birthday Clark!"** banners.
+photos, and big 3D **"Happy Birthday [name]!"** banners.
 
 Built with **[Three.js](https://threejs.org/) + [Vite](https://vitejs.dev/)**.
 
