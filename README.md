@@ -20,12 +20,7 @@ Built with **[Three.js](https://threejs.org/) + [Vite](https://vitejs.dev/)**.
 | `dist.zip` | Zipped copy of the production bundle |
 | `lowpoly-f1-car.zip` | The low-poly F1 car model (OBJ + texture) |
 | `clark headshot.png` | Source headshot (the cake topper `clark_topper.png` is derived from this) |
-| `log june 4th 2026.md` | Detailed development log / feature history / gotchas |
 | `README.md` | This file |
-
-> ℹ️ The project was produced in a remote Claude Code session with **no git
-> remote** (commit signing was failing there), so each iteration was delivered as
-> zips. To version it yourself: `cd source`, `git init`, and push to your own remote.
 
 ---
 
